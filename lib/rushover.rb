@@ -38,6 +38,10 @@ module Rushover
 
       Response.new JSON.parse(raw_response)
     end
+
+    def validate!(user_key, device = nil)
+      validate(user_key, device).ok?
+    end
   end
 
   class User
@@ -50,6 +54,14 @@ module Rushover
 
     def notify(message, options = {})
       client.notify(key, message, options)
+    end
+
+    def validate(device = nil)
+      client.validate(key, device)
+    end
+
+    def validate!(device = nil)
+      validate(device).ok?
     end
   end
 

@@ -19,4 +19,19 @@ class RushoverUserTest < RushoverTest
     assert_equal "test user message", last_request_json["message"]
     assert_equal "1", last_request_json["priority"].to_s
   end
+
+  test "validate if user exists" do
+    resp = @user.validate
+    assert_equal "user_key", last_request_json["user"]
+    assert resp.ok?
+  end
+
+  test "validate if user device exists" do
+    @user.validate("htc4g")
+    assert_equal "htc4g", last_request_json["device"]
+  end
+
+  test "validate! calls ok?" do
+    assert @user.validate!
+  end
 end

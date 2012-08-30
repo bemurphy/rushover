@@ -83,5 +83,9 @@ class RushoverClientTest < RushoverTest
       assert_equal "user_missing", last_request_json["user"]
       refute resp.ok?
     end
+
+    test "validate! calls ok?" do
+      assert client.validate!("user_exists")
+    end
   end
 end
