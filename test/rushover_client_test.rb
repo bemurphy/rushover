@@ -56,4 +56,32 @@ class RushoverClientTest < RushoverTest
       assert_equal "123123", last_request_json["timestamp"].to_s
     end
   end
+
+  context "user validation" do
+    test "determining a user exists" do
+      FakeWeb.register_uri(:post, "https://api.pushover.net/1/users/validate.json",
+                           :body => { "status" => 1 }.to_json,
+                           :content_type => "application/json")
+      resp = client.validate("user_exists")
+      assert_equal "user_exists", last_request_json["user"]
+      assert resp.ok?
+    end
+
+    test "determining a user device exists" do
+      FakeWeb.register_uri(:post, "https://api.pushover.net/1/users/validate.json",
+                           :body => { "status" => 1 }.to_json,
+                           :content_type => "application/json")
+      resp = client.validate("user_exists", "htc4g")
+      assert_equal "htc4g", last_request_json["device"]
+    end
+
+    test "determining a user does not exist" do
+      FakeWeb.register_uri(:post, "https://api.pushover.net/1/users/validate.json",
+                           :body => { "status" => 0 }.to_json,
+                           :content_type => "application/json")
+      resp = client.validate("user_missing")
+      assert_equal "user_missing", last_request_json["user"]
+      refute resp.ok?
+    end
+  end
 end
