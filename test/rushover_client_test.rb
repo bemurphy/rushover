@@ -48,7 +48,8 @@ class RushoverClientTest < RushoverTest
 
   context "with optional params" do
     test "basic optional params" do
-      client.notify("test_user", "test message", :device => "test device", :title => "test title", :priority => 1, :timestamp => 123123)
+      client.notify("test_user", "test message", :device => "test device",
+                    :title => "test title", :priority => 1, :timestamp => 123123)
       assert_equal "test device", last_request_json["device"]
       assert_equal "test title", last_request_json["title"]
       assert_equal "1", last_request_json["priority"].to_s
