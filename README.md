@@ -23,7 +23,8 @@ Or install it yourself as:
 require "rushover"
 
 client = Rushover::Client.new(your_app_token)
-client.notify(user_key, "some message", :priority => 1, :title => "a title!")
+resp = client.notify(user_key, "some message", :priority => 1, :title => "a title!")
+resp.ok? # => true
 
 # Also provides a User class for convenience.  Just keeps the user key
 # around if you want to deal with a User object
@@ -33,8 +34,9 @@ user.notify("some user message", :title => "another title")
 
 Optional params to the Pushover like `priority` or `title` are passed through.
 
-Calls to `#notify` will return the parsed JSON response body.  Pushover app uses
-:status => 1 for success, 0 for failures.
+Calls to `#notify` will return a `Rushover::Response`.  Pushover app uses
+:status => 1 for success, 0 for failures. The response can be checked for
+success with `#ok?`, or mined like a plain old hash.
 
 ## Contributing
 

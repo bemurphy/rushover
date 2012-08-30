@@ -33,7 +33,7 @@ class RushoverClientTest < RushoverTest
 
     test "successful notify" do
       resp = client.notify("test_user", "test message")
-      assert_equal({"status" => 1}, resp)
+      assert_equal 1, resp["status"]
     end
 
     test "failed notify" do
