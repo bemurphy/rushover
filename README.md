@@ -26,6 +26,10 @@ client = Rushover::Client.new(your_app_token)
 resp = client.notify(user_key, "some message", :priority => 1, :title => "a title!")
 resp.ok? # => true
 
+# Validate that a user exists
+client.validate!(existing_user) # => true
+client.validate!(existing_user, existing_device) # => true
+
 # Also provides a User class for convenience.  Just keeps the user key
 # around if you want to deal with a User object
 user = Rushover::User.new(user_key, rushover_client)
