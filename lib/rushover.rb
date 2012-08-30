@@ -5,6 +5,7 @@ require "json"
 module Rushover
   class Client
     MESSAGES_ENDPOINT = "https://api.pushover.net/1/messages.json".freeze
+
     attr_accessor :token
 
     def initialize(token)
@@ -20,6 +21,19 @@ module Rushover
       rescue RestClient::Exception => e
         JSON.parse(e.response)
       end
+    end
+  end
+
+  class User
+    attr_accessor :key, :client
+
+    def initialize(key, client)
+      @key = key
+      @client = client
+    end
+
+    def notify(message, options = {})
+      client.notify(key, message, options)
     end
   end
 end
