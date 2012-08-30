@@ -15,14 +15,14 @@ module Rushover
     def notify(user_key, message, options = {})
       data = { :token => token, :user => user_key, :message => message }
       data.merge!(options)
-      data = begin
-        resp = RestClient.post MESSAGES_ENDPOINT, data.to_json, :content_type => "application/json"
-        JSON.parse(resp)
+
+      raw_response = begin
+        RestClient.post MESSAGES_ENDPOINT, data.to_json, :content_type => "application/json"
       rescue RestClient::Exception => e
-        JSON.parse(e.response)
+        e.response
       end
 
-      Response.new(data)
+      Response.new JSON.parse(raw_response)
     end
   end
 
