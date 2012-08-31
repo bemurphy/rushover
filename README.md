@@ -27,8 +27,8 @@ resp = client.notify(user_key, "some message", :priority => 1, :title => "a titl
 resp.ok? # => true
 
 # Validate that a user exists
-client.validate!(existing_user) # => true
-client.validate!(existing_user, existing_device) # => true
+client.validate!(existing_user_key) # => true
+client.validate!(existing_user_key, existing_device) # => true
 
 # Also provides a User class for convenience.  Just keeps the user key
 # around if you want to deal with a User object
