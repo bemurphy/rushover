@@ -4,8 +4,9 @@ require "json"
 
 module Rushover
   class Client
-    MESSAGES_ENDPOINT = "https://api.pushover.net/1/messages.json".freeze
-    VALIDATE_ENDPOINT = "https://api.pushover.net/1/users/validate.json".freeze
+    BASE_URL = "https://api.pushover.net/1".freeze
+    MESSAGES_ENDPOINT = "#{BASE_URL}/messages.json".freeze
+    VALIDATE_ENDPOINT = "#{BASE_URL}/users/validate.json".freeze
 
     attr_accessor :token
 
@@ -16,31 +17,29 @@ module Rushover
     def notify(user_key, message, options = {})
       data = { :token => token, :user => user_key, :message => message }
       data.merge!(options)
-
-      raw_response = begin
-        RestClient.post MESSAGES_ENDPOINT, data.to_json, :content_type => "application/json"
-      rescue RestClient::Exception => e
-        e.response
-      end
-
-      Response.new JSON.parse(raw_response)
+      post_json(MESSAGES_ENDPOINT, data)
     end
 
     def validate(user_key, device = nil)
       data = { :token => token, :user => user_key }
       data[:device] = device if device
+      post_json(VALIDATE_ENDPOINT, data)
+    end
 
+    def validate!(user_key, device = nil)
+      validate(user_key, device).ok?
+    end
+
+    private
+
+    def post_json(url, data)
       raw_response = begin
-        RestClient.post VALIDATE_ENDPOINT, data.to_json, :content_type => "application/json"
+        RestClient.post url, data.to_json, :content_type => "application/json"
       rescue RestClient::Exception => e
         e.response
       end
 
       Response.new JSON.parse(raw_response)
-    end
-
-    def validate!(user_key, device = nil)
-      validate(user_key, device).ok?
     end
   end
 
