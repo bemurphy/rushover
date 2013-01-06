@@ -20,7 +20,8 @@ class RushoverTest < Test::Unit::TestCase
     FakeWeb.clean_registry
   end
 
-  def last_request_json
-    JSON.parse(FakeWeb.last_request.body)
+  def last_request_param(param)
+    params = CGI.parse(FakeWeb.last_request.body)
+    Array(params[param]).first
   end
 end

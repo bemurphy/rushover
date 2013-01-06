@@ -16,19 +16,19 @@ class RushoverUserTest < RushoverTest
 
   test "notifying the user via the client" do
     @user.notify("test user message", :priority => 1)
-    assert_equal "test user message", last_request_json["message"]
-    assert_equal "1", last_request_json["priority"].to_s
+    assert_equal "test user message", last_request_param("message")
+    assert_equal "1", last_request_param("priority").to_s
   end
 
   test "validate if user exists" do
     resp = @user.validate
-    assert_equal "user_key", last_request_json["user"]
+    assert_equal "user_key", last_request_param("user")
     assert resp.ok?
   end
 
   test "validate if user device exists" do
     @user.validate("htc4g")
-    assert_equal "htc4g", last_request_json["device"]
+    assert_equal "htc4g", last_request_param("device")
   end
 
   test "validate! calls ok?" do

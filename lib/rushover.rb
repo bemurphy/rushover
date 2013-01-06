@@ -34,7 +34,7 @@ module Rushover
 
     def post_json(url, data)
       raw_response = begin
-        RestClient.post url, data.to_json, :content_type => "application/json"
+        RestClient.post url, data
       rescue RestClient::Exception => e
         e.response
       end
