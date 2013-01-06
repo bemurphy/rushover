@@ -20,15 +20,15 @@ class RushoverClientTest < RushoverTest
     end
 
     test "sending a message uses the token" do
-      assert_equal "test_api_token", last_request_json["token"]
+      assert_equal "test_api_token", last_request_param("token")
     end
 
     test "sending a message to the intended user" do
-      assert_equal "test_user", last_request_json["user"]
+      assert_equal "test_user", last_request_param("user")
     end
 
     test "sending a notification includes the message" do
-      assert_equal "test message", last_request_json["message"]
+      assert_equal "test message", last_request_param("message")
     end
 
     test "successful notify" do
@@ -50,10 +50,10 @@ class RushoverClientTest < RushoverTest
     test "basic optional params" do
       client.notify("test_user", "test message", :device => "test device",
                     :title => "test title", :priority => 1, :timestamp => 123123)
-      assert_equal "test device", last_request_json["device"]
-      assert_equal "test title", last_request_json["title"]
-      assert_equal "1", last_request_json["priority"].to_s
-      assert_equal "123123", last_request_json["timestamp"].to_s
+      assert_equal "test device", last_request_param("device")
+      assert_equal "test title", last_request_param("title")
+      assert_equal "1", last_request_param("priority").to_s
+      assert_equal "123123", last_request_param("timestamp").to_s
     end
   end
 
@@ -63,7 +63,7 @@ class RushoverClientTest < RushoverTest
                            :body => { "status" => 1 }.to_json,
                            :content_type => "application/json")
       resp = client.validate("user_exists")
-      assert_equal "user_exists", last_request_json["user"]
+      assert_equal "user_exists", last_request_param("user")
       assert resp.ok?
     end
 
@@ -72,7 +72,7 @@ class RushoverClientTest < RushoverTest
                            :body => { "status" => 1 }.to_json,
                            :content_type => "application/json")
       resp = client.validate("user_exists", "htc4g")
-      assert_equal "htc4g", last_request_json["device"]
+      assert_equal "htc4g", last_request_param("device")
     end
 
     test "determining a user does not exist" do
@@ -80,7 +80,7 @@ class RushoverClientTest < RushoverTest
                            :body => { "status" => 0 }.to_json,
                            :content_type => "application/json")
       resp = client.validate("user_missing")
-      assert_equal "user_missing", last_request_json["user"]
+      assert_equal "user_missing", last_request_param("user")
       refute resp.ok?
     end
 
