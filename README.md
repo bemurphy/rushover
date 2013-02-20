@@ -26,6 +26,13 @@ client = Rushover::Client.new(your_app_token)
 resp = client.notify(user_key, "some message", :priority => 1, :title => "a title!")
 resp.ok? # => true
 
+# You can also send emergency priority 2 messages
+# Note you must provide expire and retry options for this to succeed
+client.notify(user_key, "some message", :priority => 2, :expire => 180, :retry => 60)
+
+# Check a receipt
+client.reciept("S2sXbSL2IKfl6caouD8hJXVn4SoD36")
+
 # Validate that a user exists
 client.validate!(existing_user_key) # => true
 client.validate!(existing_user_key, existing_device) # => true
