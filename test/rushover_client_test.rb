@@ -57,6 +57,24 @@ class RushoverClientTest < RushoverTest
     end
   end
 
+  context "looking up receipt data" do
+    test "when the receipt exists" do
+      FakeWeb.register_uri(:get, "https://api.pushover.net/1/receipts/123asdf.json?token=test_api_token",
+                           :body => {"status"=>1, "acknowledged"=>1, "acknowledged_at"=>1361314981,
+                                     "last_delivered_at"=>1361314753, "expired"=>1,
+                                     "expires_at"=>1361314783, "called_back"=>0,
+                                     "called_back_at"=>0,
+                                     "request"=>"9a38ad590235bc07ea7ae2b5fd83f99f"}.to_json,
+                           :content_type => "application/json")
+
+      resp = client.receipt("123asdf")
+      assert_equal 1, resp[:expired]
+      assert_equal 1, resp[:acknowledged]
+      assert_equal 1361314981, resp[:acknowledged_at]
+      assert_equal "9a38ad590235bc07ea7ae2b5fd83f99f", resp[:request]
+    end
+  end
+
   context "user validation" do
     test "determining a user exists" do
       FakeWeb.register_uri(:post, "https://api.pushover.net/1/users/validate.json",

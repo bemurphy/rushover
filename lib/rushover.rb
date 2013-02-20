@@ -7,6 +7,7 @@ module Rushover
     BASE_URL = "https://api.pushover.net/1".freeze
     MESSAGES_ENDPOINT = "#{BASE_URL}/messages.json".freeze
     VALIDATE_ENDPOINT = "#{BASE_URL}/users/validate.json".freeze
+    RECEIPT_ENDPOINT = "#{BASE_URL}/receipts/%s.json".freeze
 
     attr_accessor :token
 
@@ -30,16 +31,34 @@ module Rushover
       validate(user_key, device).ok?
     end
 
+    def receipt(id)
+      data = { :token => token }
+      url = RECEIPT_ENDPOINT % id
+      get_json(url, data)
+    end
+
     private
 
-    def post_json(url, data)
+    def parse_response
       raw_response = begin
-        RestClient.post url, data
+        yield
       rescue RestClient::Exception => e
         e.response
       end
 
       Response.new JSON.parse(raw_response)
+    end
+
+    def get_json(url, data)
+      parse_response do
+        RestClient.get url, { :params => data }
+      end
+    end
+
+    def post_json(url, data)
+      parse_response do
+        RestClient.post url, data
+      end
     end
   end
 
