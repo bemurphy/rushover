@@ -31,7 +31,7 @@ resp.ok? # => true
 client.notify(user_key, "some message", :priority => 2, :expire => 180, :retry => 60)
 
 # Check a receipt
-client.reciept("S2sXbSL2IKfl6caouD8hJXVn4SoD36")
+client.receipt("S2sXbSL2IKfl6caouD8hJXVn4SoD36")
 
 # Validate that a user exists
 client.validate!(existing_user_key) # => true
